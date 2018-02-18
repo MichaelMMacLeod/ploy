@@ -5,34 +5,34 @@
 (defun parse-hex (str)
   (parse-integer str :radix 16))
 
-;;; Color scheme utils
+;;; Schema utils
 
-(defvar *color-scheme*)
+(defvar *schema*)
 
-(defun create-color-scheme ()
-  (setf *color-scheme* (make-hash-table :test 'equal)))
+(defun initialize-schema ()
+  (setf *schema* (make-hash-table :test 'equal)))
 
 (defun add-color (name hex)
-  (setf (gethash name *color-scheme*) hex))
+  (setf (gethash name *schema*) hex))
 
 (defun remove-color (name)
-  (remhash name *color-scheme*))
+  (remhash name *schema*))
 
 (defun get-color (name)
-  (gethash name *color-scheme*))
+  (gethash name *schema*))
 
 (defun format-as-human-readable ()
   (with-output-to-string (s)
     (maphash
       #'(lambda (k v) (format s "~a #~6,'0x~%" k v))
-      *color-scheme*)
+      *schema*)
     (format nil "~a" s)))
 
 (defun format-as-xresources ()
   (with-output-to-string (s)
     (maphash 
       #'(lambda (k v) (format s "*.~a: #~6,'0x~%" k v))
-      *color-scheme*)
+      *schema*)
     (format nil "~a" s)))
 
 ;;; Color scheme IO
@@ -40,14 +40,14 @@
 (defun load-schema (name)
   (with-open-file (in name)
     (with-standard-io-syntax
-      (setf *color-scheme* (read in)))))
+      (setf *schema* (read in)))))
 
 (defun write-schema (file)
   (with-open-file (out file
                        :direction :output
                        :if-exists :supersede)
     (with-standard-io-syntax
-      (print *color-scheme* out))))
+      (print *schema* out))))
 
 ;;; File IO
 
@@ -81,7 +81,7 @@
 
 (defun create-schema (params)
   (let ((schema (car params)))
-    (create-color-scheme)
+    (initialize-schema)
     (write-schema schema)))
 
 ;;; Entry point
