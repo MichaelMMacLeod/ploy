@@ -158,6 +158,7 @@ Ex:
           ((string= cmd "--list-colors")
            (list-colors-in params))
           ((string= cmd "--create")
-           (create-schema params)))))
+           (create-schema params))
+          (t (help)))))
 
 (main)
