@@ -69,6 +69,7 @@
   (let ((path (format nil "~a/.config/schema/" (posix-getenv "HOME"))))
     (ensure-directories-exist path)))
 
+
 ;;; Command line interface
 
 (defun add-color-to (params)
@@ -96,6 +97,22 @@
     (initialize-schema)
     (write-schema schema)))
 
+(defun apply-schema (params)
+  (load-schema (car params))
+  (let* ((home (posix-getenv "HOME"))
+         (xresources-part (load-file
+                      (format nil "~a/.config/schema/part.xresources"
+                              home)))
+         (xresources-path
+           (format nil "~a/.config/schema/.xresources" home)))
+    (with-open-file (out xresources-path
+                         :direction :output
+                         :if-exists :supersede)
+      (format out "~a~%~a"
+              xresources-part
+              (format-as-xresources)))
+    (run-program "/bin/xrdb" (list xresources-path))))
+
 ;;; Entry point
 
 (defun main ()
@@ -105,6 +122,8 @@
          (params (cdr args)))
     (cond ((string= cmd "add-color-to")
            (add-color-to params))
+          ((string= cmd "apply-schema")
+           (apply-schema params))
           ((string= cmd "remove-color-from")
            (remove-color-from params))
           ((string= cmd "list-colors-in")
