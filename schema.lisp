@@ -113,6 +113,33 @@
               (format-as-xresources)))
     (run-program "/bin/xrdb" (list xresources-path))))
 
+(defun help ()
+  (format t 
+"Usage: schema [OPTION]
+
+Create and modify color schemes
+
+OPTION
+    --help                          Display this message
+    --create SCHEMA                 Create a new schema
+    --add-color SCHEMA COLOR HEX    Add a color to a schema
+    --remove-color SCHEMA COLOR     Remove a color from a schema
+    --list-colors SCHEMA            List the colors in a schema
+    --apply SCHEMA                  Apply a schema
+
+Ex:
+    $ schema --create my-schema
+    $ schema --add-color my-schema foreground ffdba8
+    $ schema --add-color my-schema background 000000
+    $ schema --list-colors my-schema
+    foreground #FFDBA8
+    background #000000
+    $ schema --remove-color my-schema background
+    $ schema --list-colors my-schema
+    foreground #FFDBA8
+    $ schema --apply my-schema
+"))
+
 ;;; Entry point
 
 (defun main ()
@@ -120,15 +147,17 @@
   (let* ((args (cdr *posix-argv*))
          (cmd (car args))
          (params (cdr args)))
-    (cond ((string= cmd "add-color-to")
+    (cond ((string= cmd "--add-color")
            (add-color-to params))
-          ((string= cmd "apply-schema")
+          ((string= cmd "--help")
+           (help))
+          ((string= cmd "--apply")
            (apply-schema params))
-          ((string= cmd "remove-color-from")
+          ((string= cmd "--remove-color")
            (remove-color-from params))
-          ((string= cmd "list-colors-in")
+          ((string= cmd "--list-colors")
            (list-colors-in params))
-          ((string= cmd "create-schema")
+          ((string= cmd "--create")
            (create-schema params)))))
 
 (main)
