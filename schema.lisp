@@ -37,17 +37,25 @@
 
 ;;; Color scheme IO
 
-(defun load-schema (name)
-  (with-open-file (in name)
-    (with-standard-io-syntax
-      (setf *schema* (read in)))))
+(defun load-schema (schema)
+  (let ((file
+          (format nil "~a/.config/schema/~a"
+                  (posix-getenv "HOME")
+                  schema)))
+    (with-open-file (in file)
+      (with-standard-io-syntax
+        (setf *schema* (read in))))))
 
-(defun write-schema (file)
-  (with-open-file (out file
-                       :direction :output
-                       :if-exists :supersede)
-    (with-standard-io-syntax
-      (print *schema* out))))
+(defun write-schema (schema)
+  (let ((file
+          (format nil "~a/.config/schema/~a"
+                  (posix-getenv "HOME")
+                  schema)))
+    (with-open-file (out file
+                         :direction :output
+                         :if-exists :supersede)
+      (with-standard-io-syntax
+        (print *schema* out)))))
 
 ;;; File IO
 
@@ -56,6 +64,10 @@
     (let ((data (make-string (file-length in))))
       (read-sequence data in)
       data)))
+
+(defun ensure-config-exists ()
+  (let ((path (format nil "~a/.config/schema/" (posix-getenv "HOME"))))
+    (ensure-directories-exist path)))
 
 ;;; Command line interface
 
@@ -87,6 +99,7 @@
 ;;; Entry point
 
 (defun main ()
+  (ensure-config-exists)
   (let* ((args (cdr *posix-argv*))
          (cmd (car args))
          (params (cdr args)))
