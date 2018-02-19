@@ -1,5 +1,5 @@
 # Ploy
-An Xresources color scheme manager written in Common Lisp.
+Xresources color scheme manager written in Common Lisp.
 
 Requires [SBCL](http://sbcl.org/)
 
