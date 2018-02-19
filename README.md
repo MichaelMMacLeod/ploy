@@ -1,5 +1,7 @@
 # Ploy
-An Xresources color scheme manager.
+An Xresources color scheme manager written in Common Lisp.
+
+Requires [SBCL](http://sbcl.org/)
 
 ```
 Usage: ploy scheme-option [arg ..]
