@@ -97,8 +97,8 @@
 (defun -h ()
   "Displays command help"
   (format t
-"Usage: scheme scheme-option [arg ..]
-       scheme SCHEME color-option [arg ..]
+"Usage: ploy scheme-option [arg ..]
+       ploy SCHEME color-option [arg ..]
 
 Create and modify color schemes.
 
