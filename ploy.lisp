@@ -1,5 +1,3 @@
-#!/bin/sbcl --script
-
 (defun ensure-config-exists ()
   "Creates config directories if they don't already exist"
   (ensure-directories-exist "~/.config/ploy/")
@@ -137,5 +135,3 @@ color-option [-c|-ca|-cr|-cl]:
 (defun main ()
   (ensure-config-exists)
   (run-command-line-args))
-
-(main)
